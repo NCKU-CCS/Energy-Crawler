@@ -7,7 +7,7 @@ if __name__ == '__main__':
     success_flag = False
     while not success_flag:
         try:
-            reserveCrawler.craw()
+            reserveCrawler.crawl()
             success_flag = True
         except DataMissingException:
             print('Waiting 1 hour for data upload ...')

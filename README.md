@@ -15,7 +15,7 @@ Crawler 總共分為4種類別：
 ### 資料與Crawler的對應關係
 以下是資料與爬蟲程式會用到的相關參數:
 
-|爬蟲資料 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Path|Crawler Type|craw() convert input function|Source Link|
+|爬蟲資料 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Path|Crawler Type|crawl() convert input function|Source Link|
 |:---|---|---|---|---|
 |今日電力資訊|`data/total`|DayAppendCrawler|format_usage_json()|https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/loadpara.txt|
 |今日用電曲線(區域別)/用電量|`data/area/day_usage`|DayCrawler|None|https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/loadareas.csv|
@@ -66,19 +66,19 @@ c = DayAppendCrawler(<url>,<path>)
 `<url>`：為下載資料的連結，在上面的表格當中就是`Link`的意思
 `<path>`： 把資料下載到的路徑
 
-2. 利用 `try...except..` statment去執行Crawler的`craw()` function，若要使用convert function就將function 作為`craw()` 的 input。
+2. 利用 `try...except..` statment去執行Crawler的`crawl()` function，若要使用convert function就將function 作為`crawl()` 的 input。
 ```python
 try:
-    c.craw(convert=format_usage_json)
+    c.crawl(convert=format_usage_json)
 except CrawFailException as e1:
     print(e1)
 except DataMissingExcetion as e2:
     print(e2)
 ```
-`craw()` 有可能發生兩個Exception(下面另有說明)，使用者可以根據自己需求作處理。
+`crawl()` 有可能發生兩個Exception(下面另有說明)，使用者可以根據自己需求作處理。
 
 ## Exceptions
-以下會說明Crawler執行`craw()`時有可能發生的其中兩種意外：
+以下會說明Crawler執行`crawl()`時有可能發生的其中兩種意外：
 ### CrawFailException
 程式會呼叫`os.system()`去執行`curl`把資料抓下來，若果基於任何原因而失敗的話，此意外將來被拋出。
 
@@ -104,7 +104,7 @@ except DataMissingExcetion as e2:
 success_flag = False
 while not success_flag:
     try:
-        c.craw()
+        c.crawl()
         success_flag = True
     except DataMissingException:
         print('Waiting 1 minute for data upload...')

@@ -18,7 +18,7 @@ def format_usage_json(jfile):
     '''
     Format a total usage .csv file to csv tuple for recording
     Input:
-        List of contents craw from taipower read as .csv
+        List of contents crawl from taipower read as .csv
     Output:
         List of a string and the first column must be the record time
     '''
@@ -39,7 +39,7 @@ def format_genary_json(jfile):
     '''
     Format a genary .csv file to csv contents for recording
     Input:
-        List of contents craw from taipower read as .csv
+        List of contents crawl from taipower read as .csv
     Output:
         List of csv tuple for recording and the first line must be the record time
     '''
@@ -99,7 +99,7 @@ class AbsCrawler(ABC):
         '''
         pass
  
-    def craw(self):
+    def crawl(self):
         ensure_path(self.directory)
         status = os.system(self.cmd)
         if status != 0:
@@ -110,7 +110,7 @@ class AbsCrawler(ABC):
     @abstractmethod
     def check(self):
         '''
-        Return Ture for crawed file valid, otherwise return False
+        Return Ture for crawled file valid, otherwise return False
         '''
         pass
 
@@ -136,7 +136,7 @@ class DayCrawler(AbsCrawler):
             return [l for l in rf.readlines() if l != ',\n']
 
 class DayAppendCrawler(DayCrawler):
-    def craw(self, convert=None):
+    def crawl(self, convert=None):
         exist_flag = False
         ensure_path(self.directory)
         if os.path.isfile(self.path):
@@ -202,7 +202,7 @@ class MinuteCrawler(AbsCrawler):
         minute = int(now.minute/10)
         return now.strftime('%Y%m%d-%H{:<02d}.csv'.format(minute))
 
-    def craw(self, convert=None):
+    def crawl(self, convert=None):
         ensure_path(self.directory)
         status = os.system(self.cmd)
         if status != 0:
@@ -258,31 +258,31 @@ if __name__ == '__main__':
                         'https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/loadpara.txt',
                         './data/total/')
     
-    general_craw_dict = {genaryCrawler:format_genary_json,
+    general_crawl_dict = {genaryCrawler:format_genary_json,
                          fuelTypeCrawler:None,
                          areasCrawler:None}
-    append_craw_dict = {areasGenCrawler:('areasGenCrawler',None),
+    append_crawl_dict = {areasGenCrawler:('areasGenCrawler',None),
                         totalUsageCrawler:('totalUsageCrawler',format_usage_json)}
 
-    for c,f in general_craw_dict.items():
+    for c,f in general_crawl_dict.items():
         success_flag = False
         while not success_flag:
             try:
                 if f is not None: 
-                    c.craw(convert=f)
+                    c.crawl(convert=f)
                 else:
-                    c.craw()
+                    c.crawl()
                 success_flag = True
             except DataMissingException:
                 print('Waiting 1 minutes for data upload ...')
                 sleep(60)
                 
-    for c,t in append_craw_dict.items():
+    for c,t in append_crawl_dict.items():
         try:
             if t[1] is not None:
-                c.craw(convert=t[1])
+                c.crawl(convert=t[1])
             else:
-                c.craw()
+                c.crawl()
         except DataMissingException as e:
             print(t[0], e)
 
