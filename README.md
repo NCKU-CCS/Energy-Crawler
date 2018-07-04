@@ -15,7 +15,7 @@ Crawler 總共分為4種類別：
 ### 資料與Crawler的對應關係
 以下是資料與爬蟲程式會用到的相關參數:
 
-|爬蟲資料&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Path|Crawler Type|craw() convert input function|Source Link|
+|爬蟲資料&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Path|Crawler Type|craw() convert input function|Source Link|
 |---|---|---|---|---|
 |今日電力資訊|`data/total`|DayAppendCrawler|format_usage_json()|https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/loadpara.txt|
 |今日用電曲線(區域別)/用電量|`data/area/day_usage`|DayCrawler|None|https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/loadareas.csv|
@@ -115,8 +115,8 @@ while not success_flag:
 如果要撰寫新的Crawler class，可以參考以下內容。
 
 對應不同的情況下，已經寫好的Crawler class不一定會長久適用，因此為了應對這樣的情況，已經寫好Crawler class的template(abstract class)，只要繼承`AbsCrawler`這個class並implement當中abstract method就可以省略其他程式碼，要實作的方法有以下兩個：
-1. `_set_filename(self)`: 要如何更改抓下來的檔案名稱，回傳string
-2. `check(self)`: 怎樣檢查抓下來的資料，才算通過，回傳True/False
+1. `_set_filename(self)`: 要如何更改抓下來的檔案名稱，回傳`string`
+2. `check(self)`: 怎樣檢查抓下來的資料，才算通過，回傳`True`/`False`
 
 ## Contacts
 如有不懂歡迎寄信，Email: grandq33769@gmail.com (梁樂謙)
