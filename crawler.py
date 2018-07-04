@@ -245,9 +245,6 @@ if __name__ == '__main__':
     genaryCrawler = MinuteCrawler(
                         'https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/genary.txt',
                         './data/genary/')
-    reserveCrawler = YearCrawler(
-                        'https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/reserve.csv',
-                        './data/reserve')
     fuelTypeCrawler = DayCrawler(
                     'https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/loadfueltype.csv',
                     './data/fueltype/')
