@@ -59,7 +59,7 @@ crontab -e
 以下是`.py`內的程式碼
 
 1.Import並生成所需要的crawler和function(以`今日電力資訊`為例)
-```python=
+```python
 from crawler import DayAppendCrawler, format_usage_json
 c = DayAppendCrawler(<url>,<path>)
 ```
@@ -67,7 +67,7 @@ c = DayAppendCrawler(<url>,<path>)
 `<path>`： 把資料下載到的路徑
 
 2. 利用 `try...except..` statment去執行Crawler的`craw()` function，若要使用convert function就將function 作為`craw()` 的 input。
-```python=
+```python
 try:
     c.craw(convert=format_usage_json)
 except CrawFailException as e1:
@@ -88,14 +88,16 @@ except DataMissingExcetion as e2:
 
 以範本程式(`crawler.py`)為例，抓回來的資料會對比筆數，抓回來的筆數數量，和當時時間應該擁有幾筆資料作比較。
 例子：假設要抓`今日用電曲線(區域別)/用電量`的資料，抓取時間為`2018年7月4日 17:23`，由於每10分鐘就有一筆新資料，那麼`./data/area/day_usage/` 中的 `20180704.csv` 應該要有`17*6 + int(23/10) + 1 = 105`筆資料，可是由於台電資料並不是準時更新，因此，程式抓下來的資料可能只有`104`筆，由於資料數量不對齊，所以此意外就會出現。
-:::danger
+
+#### 注意：
 使用`DayAppendCrawler`的程式碼時，由於剛開始的時候只抓到一筆下來，除非是`00:00`執行程式，不然對那份資料來說，筆數會永遠對不上，因為之前的資料都錯過了，因此可以單純印出訊息代替，直到隔天`00:00`開始，資料才會開始對上。
-:::
+
+
 建議：用一個`while`無限迴圈不斷抓出這個意外，直到資料筆數正確為止，期間可以先設定等待時間，每隔多久再抓一次。
 
 
 以下是範本中的程式碼：
-```python=
+```python
 success_flag = False
 while not success_flag:
     try:
