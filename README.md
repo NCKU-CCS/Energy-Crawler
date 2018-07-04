@@ -16,7 +16,7 @@ Crawler 總共分為4種類別：
 以下是資料與爬蟲程式會用到的相關參數:
 
 |爬蟲資料&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Path|Crawler Type|craw() convert input function|Source Link|
-|---|---|---|---|---|
+|:---|---|---|---|---|
 |今日電力資訊|`data/total`|DayAppendCrawler|format_usage_json()|https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/loadpara.txt|
 |今日用電曲線(區域別)/用電量|`data/area/day_usage`|DayCrawler|None|https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/loadareas.csv|
 |今日用電曲線(區域別)/用發電量|`data/area/gen_usage`|DayAppendCrawler|None|https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/genloadareaperc.csv|
