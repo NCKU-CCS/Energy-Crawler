@@ -244,22 +244,22 @@ class DataMissingException(Exception):
 if __name__ == '__main__':
     genaryCrawler = MinuteCrawler(
                         'https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/genary.txt',
-                        '~/data/TaiPower/genary/')
+                        './data/genary/')
     reserveCrawler = YearCrawler(
                         'https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/reserve.csv',
-                        '~/data/TaiPower/reserve')
+                        './data/reserve')
     fuelTypeCrawler = DayCrawler(
                     'https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/loadfueltype.csv',
-                    '~/data/TaiPower/fueltype/')
+                    './data/fueltype/')
     areasCrawler = DayCrawler(
                     'https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/loadareas.csv',
-                    '~/data/TaiPower/area/day_usage/')
+                    './data/area/day_usage/')
     areasGenCrawler = DayAppendCrawler(
                         'https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/genloadareaperc.csv',
-                        '~/data/TaiPower/area/gen_usage/')
+                        './data/area/gen_usage/')
     totalUsageCrawler = DayAppendCrawler(
                         'https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/loadpara.txt',
-                        '~/data/TaiPower/total/')
+                        './data/total/')
     
     general_craw_dict = {genaryCrawler:format_genary_json,
                          fuelTypeCrawler:None,
