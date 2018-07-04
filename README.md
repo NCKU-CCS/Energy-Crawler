@@ -15,7 +15,7 @@ Crawler 總共分為4種類別：
 ### 資料與Crawler的對應關係
 以下是資料與爬蟲程式會用到的相關參數:
 
-|爬蟲資料&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Path|Crawler Type|craw() convert input function|Source Link|
+|爬蟲資料&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Path|Crawler Type|craw() convert input function|Source Link|
 |---|---|---|---|---|
 |今日電力資訊|`data/total`|DayAppendCrawler|format_usage_json()|https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/loadpara.txt|
 |今日用電曲線(區域別)/用電量|`data/area/day_usage`|DayCrawler|None|https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/loadareas.csv|
@@ -82,18 +82,21 @@ except DataMissingExcetion as e2:
 ### CrawFailException
 程式會呼叫`os.system()`去執行`curl`把資料抓下來，若果基於任何原因而失敗的話，此意外將來被拋出。
 
-建議：如要處理這意外，可以寫一段小程式寄出一封email通知自己有意外情況發生。
+#### 建議
+如要處理這意外，可以寫一段小程式寄出一封email通知自己有意外情況發生。
+
 ### DataMissingException
 程式抓回來的資料會被程式檢查，檢查有沒有抓對時間的資料或是抓完之後的筆數有沒有正確（詳見`crawler.py`中的`check()`），若果檢查沒通過程式就會拋出此意外。
 
 以範本程式(`crawler.py`)為例，抓回來的資料會對比筆數，抓回來的筆數數量，和當時時間應該擁有幾筆資料作比較。
 例子：假設要抓`今日用電曲線(區域別)/用電量`的資料，抓取時間為`2018年7月4日 17:23`，由於每10分鐘就有一筆新資料，那麼`./data/area/day_usage/` 中的 `20180704.csv` 應該要有`17*6 + int(23/10) + 1 = 105`筆資料，可是由於台電資料並不是準時更新，因此，程式抓下來的資料可能只有`104`筆，由於資料數量不對齊，所以此意外就會出現。
 
-#### 注意：
+#### 注意
 使用`DayAppendCrawler`的程式碼時，由於剛開始的時候只抓到一筆下來，除非是`00:00`執行程式，不然對那份資料來說，筆數會永遠對不上，因為之前的資料都錯過了，因此可以單純印出訊息代替，直到隔天`00:00`開始，資料才會開始對上。
 
 
-建議：用一個`while`無限迴圈不斷抓出這個意外，直到資料筆數正確為止，期間可以先設定等待時間，每隔多久再抓一次。
+#### 建議
+用一個`while`無限迴圈不斷抓出這個意外，直到資料筆數正確為止，期間可以先設定等待時間，每隔多久再抓一次。
 
 
 以下是範本中的程式碼：
