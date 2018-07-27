@@ -17,7 +17,7 @@ Crawler 總共分為5種類別：
 ### 資料與Crawler的對應關係
 以下是資料與爬蟲程式會用到的相關參數:
 
-|爬蟲資料 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Path|Crawler Type|crawl() convert input function|Source Link|
+|爬蟲資料 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Path|Crawler Type|crawl() convert input function|Source Link|
 |:---|---|---|---|---|
 |今日電力資訊|`data/taipower/total`|DayAppendCrawler|format_usage_json()|https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/loadpara.txt|
 |今日用電曲線(區域別)/用電量|`data/taipower/area/day_usage`|DayCrawler|None|https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/loadareas.csv|
@@ -29,7 +29,7 @@ Crawler 總共分為5種類別：
 |100m 風能密度|`data/greenmet/wind/density`|HourCrawler|None|http://greenmet.cwb.gov.tw/data/map_csv/Display/Range/Analysis/{time}/NOCWRF_03000_00_K01WED_{time}_0000.csv|
 |100m 風速|`data/greenmet/wind/speed`|HourCrawler|None|http://greenmet.cwb.gov.tw/data/map_csv/Display/Range/Analysis/{time}/NOCWRF_03000_00_K01WSP_{time}_0000.csv|
 |太陽能發電量|`data/greenmet/solar/power_gen`|HourCrawler|None|http://greenmet.cwb.gov.tw/data/map_csv/Display/Range/Analysis/{time}/HIMAW8_01000_00_B00SED_{time}_0000.csv|
-|地表日射量|`data/greenmet/solar/radiation`|HourCrawler|None||http://greenmet.cwb.gov.tw/data/map_csv/Display/Range/Analysis/{time}/HIMAW8_01000_00_B00DIR_{time}_0000.csv
+|地表日射量|`data/greenmet/solar/radiation`|HourCrawler|None|http://greenmet.cwb.gov.tw/data/map_csv/Display/Range/Analysis/{time}/HIMAW8_01000_00_B00DIR_{time}_0000.csv|
 
 PS.
 * 在每個對應的路徑(Path)底下都會有更詳細的欄位說明
