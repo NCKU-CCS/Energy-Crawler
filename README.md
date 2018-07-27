@@ -1,4 +1,4 @@
-# Taipower Crawler說明文件
+# Energy Crawler說明文件
 簡易的爬蟲程式把能源相關的資料有格式地爬下來，目前會爬下台灣電力工司和氣象資訊綠能虛擬營運中心的資料。
 
 ## Introduction
