@@ -62,10 +62,10 @@ crontab -e
 ```
 */10 * * * * python3 path/to/taipower_min.py
 * 12 * * * python3 path/to/taipower_day.py
-* 0,6,12,18 * * * python3 path/to/greenmed_wind.py
+10 0,6,12,18 * * * python3 path/to/greenmed_wind.py
 10 0-11,22,23 * * * python3 path/to/greenmed_solar.py
 ```
-以上內容的意思是每10分鐘執行一次`taipower_min.py`，每天12點執行一次`taipower_day.py`，每天的0、6、12、18點執行一次`greenmed_wind.py`，每天的0到11和22到23點的10分執行一次`greenmed_solar.py`。
+以上內容的意思是每10分鐘執行一次`taipower_min.py`，每天12點執行一次`taipower_day.py`，每天的0、6、12、18點10分執行一次`greenmed_wind.py`，每天的0到11和22到23點10分執行一次`greenmed_solar.py`。
 
 ### Modify Contents
 若需要更改網址內容或是下載路徑，或是要單獨抓取其中一款資料，可參考以下內容。
