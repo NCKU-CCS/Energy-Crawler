@@ -7,7 +7,7 @@ BASE_PATH = './data/taipower/'
 if __name__ == '__main__':
     reserveCrawler = YearCrawler(
                         'https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/reserve.csv',
-                        os.path.join(BASE_PATH, 'reserve/')
+                        os.path.join(BASE_PATH, 'reserve/'))
 
     success_flag = False
     while not success_flag:

@@ -1,7 +1,8 @@
 import os
 import datetime
 import pytz
-from lib.crawler import HourCrawler
+from time import sleep
+from lib.crawler import HourCrawler, DataMissingException
 
 BASE_PATH = './data/greenmet/wind/'
 

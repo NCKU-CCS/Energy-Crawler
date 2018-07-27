@@ -15,7 +15,7 @@ if __name__ == '__main__':
     radiation_url = 'http://greenmet.cwb.gov.tw/data/map_csv/Display/Range/Analysis/{time}/HIMAW8_01000_00_B00DIR_{time}_0000.csv'.format(time=now)
 
     crawl_dict = {power_gen_url: os.path.join(BASE_PATH, 'power_gen/'),
-                  radiation_url: os.path.join(BASE_PATH, ' radiation/')}
+                  radiation_url: os.path.join(BASE_PATH, 'radiation/')}
 
     crawl_list = [HourCrawler(k,v) for k,v in crawl_dict.items()]
 

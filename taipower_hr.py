@@ -56,7 +56,7 @@ if __name__ == '__main__':
                         os.path.join(BASE_PATH, 'gen_usage/'))
     totalUsageCrawler = DayAppendCrawler(
                         'https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/loadpara.txt',
-                        os.path.join(BASE_PATH, ' total/'))
+                        os.path.join(BASE_PATH, 'total/'))
     
     general_crawl_dict = {genaryCrawler:format_genary_json,
                          fuelTypeCrawler:None,
