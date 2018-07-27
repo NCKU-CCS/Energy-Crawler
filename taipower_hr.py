@@ -1,6 +1,9 @@
+import os
 import json
 from time import sleep
 from lib.crawler import MinuteCrawler, DayCrawler, DayAppendCrawler, DataMissingException 
+
+BASE_PATH = './data/taipower'
 
 def format_usage_json(jfile):
     '''
@@ -41,19 +44,19 @@ def format_genary_json(jfile):
 if __name__ == '__main__':
     genaryCrawler = MinuteCrawler(
                         'https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/genary.txt',
-                        './data/taipower/genary/')
+                        os.path.join(BASE_PATH, 'genary/'))
     fuelTypeCrawler = DayCrawler(
                     'https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/loadfueltype.csv',
-                    './data/taipower/fueltype/')
+                    os.path.join(BASE_PATH, 'fueltype/'))
     areasCrawler = DayCrawler(
                     'https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/loadareas.csv',
-                    './data/taipower/area/day_usage/')
+                    os.path.join(BASE_PATH, 'day_usage/'))
     areasGenCrawler = DayAppendCrawler(
                         'https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/genloadareaperc.csv',
-                        './data/taipower/area/gen_usage/')
+                        os.path.join(BASE_PATH, 'gen_usage/'))
     totalUsageCrawler = DayAppendCrawler(
                         'https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/loadpara.txt',
-                        './data/taipower/total/')
+                        os.path.join(BASE_PATH, ' total/'))
     
     general_crawl_dict = {genaryCrawler:format_genary_json,
                          fuelTypeCrawler:None,

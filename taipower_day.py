@@ -1,9 +1,14 @@
+import os
 from time import sleep
 from lib.crawler import YearCrawler, DataMissingException
+
+BASE_PATH = './data/taipower/'
+
 if __name__ == '__main__':
     reserveCrawler = YearCrawler(
                         'https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/reserve.csv',
-                        './data/taipower/reserve')
+                        os.path.join(BASE_PATH, 'reserve/')
+
     success_flag = False
     while not success_flag:
         try:

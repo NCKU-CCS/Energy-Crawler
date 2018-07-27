@@ -1,7 +1,10 @@
+import os
 import datetime
 import pytz
 from time import sleep
 from lib.crawler import HourCrawler, DataMissingException
+
+BASE_PATH = './data/greenmet/solar/'
 
 TZ = pytz.timezone('Asia/Taipei')
 
@@ -11,8 +14,8 @@ if __name__ == '__main__':
     power_gen_url = 'http://greenmet.cwb.gov.tw/data/map_csv/Display/Range/Analysis/{time}/HIMAW8_01000_00_B00SED_{time}_0000.csv'.format(time=now)
     radiation_url = 'http://greenmet.cwb.gov.tw/data/map_csv/Display/Range/Analysis/{time}/HIMAW8_01000_00_B00DIR_{time}_0000.csv'.format(time=now)
 
-    crawl_dict = {power_gen_url: './data/greenmet/solar/power_gen/',
-                  radiation_url: './data/greenmet/solar/radiation/'}
+    crawl_dict = {power_gen_url: os.path.join(BASE_PATH, 'power_gen/'),
+                  radiation_url: os.path.join(BASE_PATH, ' radiation/')}
 
     crawl_list = [HourCrawler(k,v) for k,v in crawl_dict.items()]
 
