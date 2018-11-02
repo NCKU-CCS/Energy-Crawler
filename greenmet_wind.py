@@ -1,13 +1,14 @@
 import os
 import datetime
 import pytz
-from time import sleep
-from lib.crawler import HourCrawler, DataMissingException
+from lib.crawler import HourCrawler, CrawlerCollector, DataMissingException
 
-BASE_PATH = './data/greenmet/wind/'
+BASE_PATH = '~/data/Greenmet/wind/'
 
 TZ = pytz.timezone('Asia/Taipei')
-HR = ['00','06','12','18']
+
+MAX_TIME = 168
+WAITING_SEC = 3600
 
 if __name__ == '__main__':
     now = datetime.datetime.now(TZ).strftime('%Y%m%d%H')
@@ -22,12 +23,6 @@ if __name__ == '__main__':
 
     crawl_list = [HourCrawler(k,v) for k,v in crawl_dict.items()]
 
-    for c in crawl_list:
-        success_flag = False
-        while not success_flag:
-            try:
-                c.crawl()
-                success_flag = True
-            except DataMissingException:
-                print('Waiting 1 hour for data upload ...')
-                sleep(3600)
+    cc = CrawlerCollector(MAX_TIME, WAITING_SEC)
+    cc.add(crawl_list)
+    cc.all_crawl()

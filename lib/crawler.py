@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 import os
 import datetime
 import pytz
+from time import sleep
 
 TZ = pytz.timezone('Asia/Taipei')
 
@@ -19,11 +20,12 @@ class AbsCrawler(ABC):
     _cmd = 'curl {url} > {path}'
     _filename = ''
 
-    def __init__(self, url, directory):
+    def __init__(self, url, directory, convert=None):
         self._now = datetime.datetime.now(TZ)
         self.url = url
         self.directory = directory
         self._filename = self._set_filename()
+        self.convert = convert
 
     @property
     def url(self):
@@ -71,7 +73,7 @@ class AbsCrawler(ABC):
         ensure_path(self.directory)
         status = os.system(self.cmd)
         if status != 0:
-            raise CrawFailException('Craw Action Failed !')
+            raise CrawlFailException('Crawl Action Failed !')
         if not self.check():
             raise DataMissingException('Crawed data is missing !')
    
@@ -103,7 +105,7 @@ class DayCrawler(AbsCrawler):
             return [l for l in rf.readlines() if l != ',\n']
 
 class DayAppendCrawler(DayCrawler):
-    def crawl(self, convert=None):
+    def crawl(self):
         exist_flag = False
         ensure_path(self.directory)
         if os.path.isfile(self.path):
@@ -112,23 +114,24 @@ class DayAppendCrawler(DayCrawler):
 
         status = os.system(self.cmd)
         if status != 0:
-            raise CrawFailException('Craw Action Failed !')
+            raise CrawlFailException('Crawl Action Failed !')
         new = self.store() 
-        if convert is not None: new = convert(new)
+        if self.convert is not None: new = self.convert(new)
         if exist_flag: 
-            self.append(old, new)
-        else:
-            with open(self.path, 'w') as wf:
-                wf.writelines(new)
+            new = self.append(old, new)
+
+        with open(self.path, 'w') as wf:
+            wf.writelines(new)
 
         if not self.check():
-            raise DataMissingException('Crawed data is missing !')
+            raise DataMissingException('Crawed data is not match the current time!')
 
     def append(self, old, new):
         # print(old, new)
         last_time = old[-1].split(',')[0]
         new_time = new[0].split(',')[0]
                 
+        ## Care about new day 
         if last_time == '23:50':
             combine = new
         elif last_time != new_time: 
@@ -136,9 +139,7 @@ class DayAppendCrawler(DayCrawler):
         else:
             combine = old
 
-        # print(combine)
-        with open(self.path, 'w') as wf:
-            wf.writelines(combine)
+        return combine
 
 class YearCrawler(AbsCrawler):
     def _set_filename(self):
@@ -167,14 +168,14 @@ class MinuteCrawler(AbsCrawler):
         minute = int(self.now.minute/10)
         return self.now.strftime('%Y%m%d-%H{:<02d}.csv'.format(minute))
 
-    def crawl(self, convert=None):
+    def crawl(self):
         ensure_path(self.directory)
         status = os.system(self.cmd)
         if status != 0:
-            raise CrawFailException('Craw Action Failed !')
+            raise CrawlFailException('Crawl Action Failed !')
         new = self.store()
-        if convert is not None:
-            new = convert(new)
+        if self.convert is not None:
+            new = self.convert(new)
             with open(self.path, 'w') as wf:
                 wf.writelines(new)
         if not self.check():
@@ -211,8 +212,40 @@ class HourCrawler(AbsCrawler):
         else:
             return False
 
+class CrawlerCollector():
+    def __init__(self, max_time, waiting_sec):
+        self.max_time = max_time
+        self.waiting_sec = waiting_sec
+        self.crawlers = set()
 
-class CrawFailException(Exception):
+    def add(self, crawler):
+        if type(crawler) == list:
+            for c in crawler: self.crawlers.add(c)
+        elif issubclass(type(crawler), AbsCrawler):
+            self.crawlers.add(crawler)
+        else:
+            raise TypeError('Collector only can contain Crawler object.')
+
+    def all_crawl(self):
+        count = 0
+        success = [False] * len(self.crawlers)
+        while count < self.max_time:
+            for idx,c in enumerate(self.crawlers):
+                if success[idx] == True: continue
+                else:
+                    try:
+                        c.crawl()
+                        success[idx] = True
+                    except DataMissingException:
+                        print('Waiting {:d} seconds for data upload ...'.format(self.waiting_sec))
+
+            if all(success):
+                break
+            else:
+                count += 1
+                sleep(self.waiting_sec)
+
+class CrawlFailException(Exception):
     pass
 
 class DataMissingException(Exception):

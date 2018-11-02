@@ -1,20 +1,16 @@
 import os
-from time import sleep
-from lib.crawler import YearCrawler, DataMissingException
+from lib.crawler import YearCrawler, CrawlerCollector, DataMissingException
 
-BASE_PATH = './data/taipower/'
+BASE_PATH = '~/data/TaiPower/'
+
+MAX_TIME = 168
+WAITING_TIME = 3600
 
 if __name__ == '__main__':
     reserveCrawler = YearCrawler(
                         'https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/reserve.csv',
                         os.path.join(BASE_PATH, 'reserve/'))
 
-    success_flag = False
-    while not success_flag:
-        try:
-            reserveCrawler.crawl()
-            success_flag = True
-        except DataMissingException:
-            print('Waiting 1 hour for data upload ...')
-            sleep(3600)
-
+    cc = CrawlerCollector(MAX_TIME, WAITING_TIME)
+    cc.add(reserveCrawler)
+    cc.all_crawl()

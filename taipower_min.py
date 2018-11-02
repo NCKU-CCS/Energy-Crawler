@@ -1,9 +1,10 @@
 import os
 import json
-from time import sleep
-from lib.crawler import MinuteCrawler, DayCrawler, DayAppendCrawler, DataMissingException 
+from lib.crawler import MinuteCrawler, DayCrawler, DayAppendCrawler, CrawlerCollector, DataMissingException 
 
-BASE_PATH = './data/taipower'
+BASE_PATH = '~/data/TaiPower'
+MAX_TIME = 1440
+WAITING_SEC = 60
 
 def format_usage_json(jfile):
     '''
@@ -44,45 +45,30 @@ def format_genary_json(jfile):
 if __name__ == '__main__':
     genaryCrawler = MinuteCrawler(
                         'https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/genary.txt',
-                        os.path.join(BASE_PATH, 'genary/'))
+                        os.path.join(BASE_PATH, 'genary/'),
+                        format_genary_json)
     fuelTypeCrawler = DayCrawler(
                     'https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/loadfueltype.csv',
                     os.path.join(BASE_PATH, 'fueltype/'))
     areasCrawler = DayCrawler(
                     'https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/loadareas.csv',
-                    os.path.join(BASE_PATH, 'day_usage/'))
+                    os.path.join(BASE_PATH, 'area/day_usage/'))
     areasGenCrawler = DayAppendCrawler(
                         'https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/genloadareaperc.csv',
-                        os.path.join(BASE_PATH, 'gen_usage/'))
+                        os.path.join(BASE_PATH, 'area/gen_usage/'))
     totalUsageCrawler = DayAppendCrawler(
                         'https://www.taipower.com.tw/d006/loadGraph/loadGraph/data/loadpara.txt',
-                        os.path.join(BASE_PATH, 'total/'))
+                        os.path.join(BASE_PATH, 'total/'),
+                        format_usage_json)
     
-    general_crawl_dict = {genaryCrawler:format_genary_json,
-                         fuelTypeCrawler:None,
-                         areasCrawler:None}
-    append_crawl_dict = {areasGenCrawler:('areasGenCrawler',None),
-                        totalUsageCrawler:('totalUsageCrawler',format_usage_json)}
+    # Type DayAppendCrawler Must Seperate collect
+    crawl_list = [genaryCrawler, fuelTypeCrawler, areasCrawler]
+    append_crawl_list = [areasGenCrawler, totalUsageCrawler]
 
-    for c,f in general_crawl_dict.items():
-        success_flag = False
-        while not success_flag:
-            try:
-                if f is not None: 
-                    c.crawl(convert=f)
-                else:
-                    c.crawl()
-                success_flag = True
-            except DataMissingException:
-                print('Waiting 1 minutes for data upload ...')
-                sleep(60)
-                
-    for c,t in append_crawl_dict.items():
-        try:
-            if t[1] is not None:
-                c.crawl(convert=t[1])
-            else:
-                c.crawl()
-        except DataMissingException as e:
-            print(t[0], e)
+    acc = CrawlerCollector(1, 0)
+    acc.add(append_crawl_list)
+    acc.all_crawl()
 
+    cc = CrawlerCollector(MAX_TIME, WAITING_SEC)
+    cc.add(crawl_list)
+    cc.all_crawl()
